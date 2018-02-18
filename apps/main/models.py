@@ -72,7 +72,7 @@ class Apparel_Product(models.Model):
     product_cover = models.ImageField( _("Album Cover (240px x 240px)"), upload_to='media/', default='media/None/no-img.jpg')
     product_gender_type = models.CharField(_("Gender"),max_length=256, choices=[('men', 'Male'), ('women', 'Female'), ('unisex', 'Unisex')])
     product_brand = models.CharField(_("Brand"),max_length=25)
-    product_description = models.CharField(_("Description"),max_length=500)
+    product_description = models.CharField(_("Description"),max_length=1000)
     product_price = models.CharField(_("Price"),max_length=500)
     real_brand_price = models.CharField(_("Real Brand Price"),max_length=500)
     paypal_button = models.CharField(_("Real Brand Price"),max_length=750)
