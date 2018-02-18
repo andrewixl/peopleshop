@@ -177,7 +177,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'info@peopleshop.gq'
-EMAIL_HOST_PASSWORD = 'delorean1107'
+EMAIL_HOST_PASSWORD = 'macujuthetrath'
 EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = 'info@peopleshop.gq'
