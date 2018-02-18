@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% load staticfiles %}
+	<title>People Shop</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Colo Shop Template">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap4/bootstrap.min.css'%}">
+	<link href="{% static 'main/plugins/font-awesome-4.7.0/css/font-awesome.min.css'%}" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/plugins/OwlCarousel2-2.2.1/owl.carousel.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/plugins/OwlCarousel2-2.2.1/owl.theme.default.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/plugins/OwlCarousel2-2.2.1/animate.css'%}">
+	<link rel="stylesheet" href="{% static 'main/plugins/themify-icons/themify-icons.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/plugins/jquery-ui-1.12.1.custom/jquery-ui.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/categories_styles.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/categories_responsive.css'%}">
+  <link rel="stylesheet" type="text/css" href="{% static 'main/css/productpage.css'%}">
+</head>
+
+<body>
+  <div class="super_container">
+    <header class="header trans_300">
+
+  		<!-- Top Navigation -->
+
+  		<div class="top_nav">
+  			<div class="container">
+  				<div class="row">
+  					<div class="col-md-6">
+  						<div class="top_nav_left">free shipping available on all orders</div>
+  					</div>
+  					<div class="col-md-6 text-right">
+  						<div class="top_nav_right">
+  							<ul class="top_nav_menu">
+
+  								<!-- My Account -->
+  								<li class="account">
+  									<a href="/member">
+  										My Account
+  										<i class="fa fa-angle-down"></i>
+  									</a>
+  									<ul class="account_selection">
+  										<li><a href="{% url 'account_login' %}"><i class="fa fa-sign-in" aria-hidden="true"></i>Sign In</a></li>
+  										<li><a href="{% url 'account_signup' %}"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a></li>
+  									</ul>
+  								</li>
+  							</ul>
+  						</div>
+  					</div>
+  				</div>
+  			</div>
+  		</div>
+
+  		<!-- Main Navigation -->
+
+  		<div class="main_nav_container">
+  			<div class="container">
+  				<div class="row">
+  					<div class="col-lg-12 text-right">
+  						<div class="logo_container">
+  							<a href="/">people<span>shop</span></a>
+  						</div>
+  						<nav class="navbar">
+  							<ul class="navbar_menu">
+  								<li><a href="/">home</a></li>
+  								<li><a href="/categories/apparel">shop</a></li>
+  								<li><a href="/promotions">promotion</a></li>
+  								<li><a href="/contact">contact</a></li>
+  							</ul>
+  							<ul class="navbar_user">
+  								<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+  								<li><a href="/member"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+  								<li class="checkout">
+  									<a href="#">
+  										<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+  										<span id="checkout_items" class="checkout_items">2</span>
+  									</a>
+  								</li>
+  							</ul>
+  							<div class="hamburger_container">
+  								<i class="fa fa-bars" aria-hidden="true"></i>
+  							</div>
+  						</nav>
+  					</div>
+  				</div>
+  			</div>
+  		</div>
+
+  	</header>
+<br><br><br><br><br><br>
+<main>
+    <div class="section section-gray">
+        <div class="section-content">
+            <div class="product-details">
+                <ul class="product-images justify-content-center">
+                    <li class="preview"><img src="https://peopleshopmedia.s3.amazonaws.com/media/{{product.product_cover}}" alt=""></li>
+                    <!-- Don't show small pictures if there's only 1 -->
+                    <li>
+                        <a href="javascript:void(0)"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/800/2/w/1024/6756201800_2_6_1.jpg?ts=1472203990151" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/800/2/w/1024/6756201800_1_1_1.jpg?ts=1472213925652" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/802/2/w/1024/6756201802_2_5_1.jpg?ts=1472203996493" alt=""></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/802/2/w/1024/6756201802_1_1_1.jpg?ts=1472556621736" alt=""></a>
+                    </li>
+                </ul>
+                <ul class="product-info">
+                    <li class="product-name">{{product.product_name}}</li>
+                    <li class="product-price"><span>{{product.product_price}}</span></li>
+                    <li class="product-attributes">
+                      <form class="" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                        <ul class="fields">
+                          <li>
+                              <div class="field-name">Color:</div>
+                              <label>
+                                <select name="cars">
+                                  {%for colors in colors%}
+                                  <option value="{{colors.color}}">{{colors.color}}</option>
+                                  {%endfor%}
+                                </select>
+                              </label>
+                          </li>
+                          <li>
+                              <div class="field-name">Size:</div>
+                              <label>
+                                <select name="cars">
+                                  {%for sizes in sizes%}
+                                  <option value="{{colors.color}}">{{sizes.size}}</option>
+                                  {%endfor%}
+                                </select>
+                              </label>
+                          </li>
+                          <li>
+                            <input type="hidden" name="cmd" value="_s-xclick">
+                            <input type="hidden" name="hosted_button_id" value="YB9HP7PWY8J2G">
+                            <input type="image" src="http://s3-us-west-2.amazonaws.com/peopleshopmedia/static/Add+to+Cart+Button.png" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                          </li>
+                        </ul>
+                      </form>
+                    </li>
+                    <li class="product-description">
+                        {{product.product_description}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title"><h2>Check Out More Hats</h2></div>
+        <div class="section-content">
+            <ul class="product-list">
+                <li>
+                    <a href="javascript:void(0)" class="product">
+                        <div class="product-image"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/800/2/w/1024/6756201800_2_6_1.jpg?ts=1472203990151" alt=""></div>
+                        <div class="product-name">Knit Beanie</div>
+                        <div class="product-price"><span>€</span><span>20.00</span></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script><script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script >var Chef = {
+    init: function() {
+        this.productImagePreview();
+        this.menuToggle();
+        this.misc();
+    },
+
+    productImagePreview: function() {
+        $(document).on('click', '.product-images li', function() {
+            if (!$(this).hasClass('preview')) {
+                var src = $(this).find('img').attr('src');
+                $('.product-images .preview img').attr('src', src);
+            }
+        });
+    },
+
+    menuToggle: function() {
+        $(document).on('click', '#menu .trigger', function() {
+            // Toggle open and close icons
+            $(this).find('img').each(function() {
+                if ($(this).hasClass('hidden')) {
+                    $(this).removeClass('hidden');
+                } else {
+                    $(this).addClass('hidden');
+                }
+            });
+
+            // Toggle menu links
+            $(this).siblings('.links').stop(true, true).slideToggle(200);
+
+            // Toggle open class
+            $('#menu').toggleClass('open');
+       });
+    },
+
+    misc: function() {
+        // Misc stuff
+
+        for (var i = 1; i <= 3; i++) {if (window.CP.shouldStopExecution(1)){break;}
+            $('.product').parent().eq(0).clone().appendTo('.product-list');
+        }
+window.CP.exitedLoop(1);
+
+    }
+};
+
+$(function() {
+    Chef.init();
+});
+//# sourceURL=pen.js
+</script>
+</div>
+</body></html>
