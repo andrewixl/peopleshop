@@ -1,8 +1,69 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-
+from django.core.mail import send_mail
+from django.conf import settings
+import re
 from django.utils.translation import ugettext_lazy as _
+
+class ContactManager(models.Manager):
+    def createContact(self, postData):
+        results = {'status': True, 'errors': [], 'user': None}
+        if len(postData['name']) < 3:
+            results['status'] = False
+            results['errors'].append('Name Must be at Least 3 Characters.')
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", postData['email']):
+            results['status'] = False
+            results['errors'].append('Please Enter a Valid Email.')
+        if len(postData['subject']) < 5:
+            results['status'] = False
+            results['errors'].append(
+                'Please Enter a Valid Subject in Subject Line.')
+        if len(postData['message']) < 10:
+            results['status'] = False
+            results['errors'].append('Message Must be at Least 10 Characters.')
+
+        if results['status'] == True:
+            results['errors'].append(
+                'Your Message Has Successfully Been Sent.')
+            # userInt = int(user_id)
+            # user = User.objects.get(id=userInt)
+            results['person'] = Contact.objects.create(contact_name=postData['name'], contact_email=postData['email'], contact_subject=postData['subject'], contact_message=postData['message'])
+            # send_mail(postData['subject'], postData['message'], 'admin@emgraymedia.gq', ['burger.andrewixl@gmail.com'], fail_silently=False)
+
+            subject = postData['subject']
+            from_email = settings.DEFAULT_FROM_EMAIL
+            message = 'Message:\n' + postData['message']
+            recipient_list = ['admin@peopleshop.gq','info@peopleshop.gq', postData['email']]
+            #recipient_list = ['andrew@emgraymedia.gq', 'emily@emgraymedia.gq', 'contact@emgraymedia.gq', postData['email']]
+            html_message = '''<h4>Name: </h4>
+                              <h4>{name}</h4>
+                              <h4>Email: </h4>
+                              <h4>{email}</h4>
+                              <h4>Message: </h4>
+                              <h4>{message}</h4>
+                              <h5>This is a Copy of the Sent Message From the Contact Form on peopleshop.gq/contact</h5> '''.format(name=postData['name'], email=postData['email'], message=postData['message'])
+
+            send_mail(subject, message, from_email, recipient_list,
+                      fail_silently=False, html_message=html_message)
+        return results
+
+@python_2_unicode_compatible
+class Contact(models.Model):
+    contact_name = models.CharField(max_length=25)
+    contact_email = models.CharField(max_length=50)
+    contact_subject = models.CharField(max_length=75)
+    contact_message = models.CharField(max_length=750)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = ContactManager()
+
+    class Meta:
+        verbose_name = _("Contact Response")
+        verbose_name_plural = _("Contact Responses")
+
+    def __str__(self):
+        return self.contact_subject
 
 @python_2_unicode_compatible
 class Apparel_Product(models.Model):

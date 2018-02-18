@@ -2,7 +2,9 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.utils.text import force_text
 from django.utils.translation import ugettext_lazy as _
-from .models import Apparel_Product, Apparel_Picture, Apparel_Shipping, Apparel_Sizes, Apparel_Colors
+from .models import Apparel_Product, Apparel_Picture, Apparel_Shipping, Apparel_Sizes, Apparel_Colors, Contact
+
+admin.site.register(Contact)
 
 # Register your models here.
 def get_picture_preview(obj):

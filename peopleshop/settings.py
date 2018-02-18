@@ -173,7 +173,17 @@ TEMPLATES = [
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'info@peopleshop.gq'
+EMAIL_HOST_PASSWORD = 'delorean1107'
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = 'info@peopleshop.gq'
+ADMINS = (
+    ('People Shop', 'admin@peopleshop.gq'),
+)
 
 STATICFILES_DIRS = (
     join(BASE_DIR, "static"),

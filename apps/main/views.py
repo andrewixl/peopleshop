@@ -1,7 +1,12 @@
-from django.shortcuts import render
-from .models import Apparel_Product, Apparel_Picture, Apparel_Colors, Apparel_Sizes
+from django.shortcuts import render, redirect, HttpResponse
+from .models import Apparel_Product, Apparel_Picture, Apparel_Colors, Apparel_Sizes, Contact
+from django.contrib import messages
 
 # Create your views here.
+def genErrors(request, Emessages):
+	for message in Emessages:
+		messages.error(request, message)
+
 def index(request):
     return render(request, 'main/index.html')
 
@@ -37,3 +42,9 @@ def promotions(request):
 
 def contact(request):
    return render(request, 'main/contact.html')
+
+def createcontact(request):
+	results = Contact.objects.createContact(request.POST)
+	request.session['contactstatus'] = results['status']
+	genErrors(request, results['errors'])
+	return redirect('/contact')
