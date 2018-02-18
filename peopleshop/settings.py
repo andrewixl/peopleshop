@@ -7,7 +7,7 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
-
+import os
 from os.path import dirname, join
 
 
@@ -23,7 +23,7 @@ SECRET_KEY = 'b-4w@s(qw@7tdn#=i&amp;lh9!2im6u(p_d_x64l*rwcxn_$ej237q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['52.42.172.130', 'peopleshop.gq', 'www.peopleshop.gq', 'localhost']
 
 
 # Application definition
@@ -144,10 +144,10 @@ TEMPLATES = [
         # project and tweak it according to your needs
         # join(PROJECT_ROOT, 'templates', 'uniform', 'allauth'),
         # example project specific templates
-        join(BASE_DIR, 'allauthdemo', 'templates', 'plain', 'example'),
-        #join(BASE_DIR, 'allauthdemo', 'templates', 'bootstrap', 'allauth'),
-        join(BASE_DIR, 'allauthdemo', 'templates', 'allauth'),
-        join(BASE_DIR, 'allauthdemo', 'templates'),
+        join(BASE_DIR, 'peopleshop', 'templates', 'plain', 'example'),
+        #join(BASE_DIR, 'peopleshop', 'templates', 'bootstrap', 'allauth'),
+        join(BASE_DIR, 'peopleshop', 'templates', 'allauth'),
+        join(BASE_DIR, 'peopleshop', 'templates'),
     ],
     'APP_DIRS': True,
     'OPTIONS': {
