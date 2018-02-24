@@ -26,8 +26,6 @@ class ContactManager(models.Manager):
         if results['status'] == True:
             results['errors'].append(
                 'Your Message Has Successfully Been Sent.')
-            # userInt = int(user_id)
-            # user = User.objects.get(id=userInt)
             results['person'] = Contact.objects.create(contact_name=postData['name'], contact_email=postData['email'], contact_subject=postData['subject'], contact_message=postData['message'])
             # send_mail(postData['subject'], postData['message'], 'admin@emgraymedia.gq', ['burger.andrewixl@gmail.com'], fail_silently=False)
 
@@ -66,8 +64,8 @@ class Contact(models.Model):
         return self.contact_subject
 
 @python_2_unicode_compatible
-class Apparel_Product(models.Model):
-    product_type = "apparel"
+class Apparel(models.Model):
+    product_type = models.CharField(_("Product Type"),max_length=256, choices=[('men', 'Men'), ('women', 'Female'), ('kids', 'Kids')])
     product_name = models.CharField(_("Name"), max_length=255)
     product_cover = models.ImageField( _("Album Cover (240px x 240px)"), upload_to='media/', default='media/None/no-img.jpg')
     product_gender_type = models.CharField(_("Gender"),max_length=256, choices=[('men', 'Male'), ('women', 'Female'), ('unisex', 'Unisex')])
@@ -88,8 +86,8 @@ class Apparel_Product(models.Model):
 
 
 @python_2_unicode_compatible
-class Apparel_Picture(models.Model):
-    master_apparel_product = models.ForeignKey(Apparel_Product, verbose_name=_("Apparel Product"), on_delete=models.CASCADE)
+class Picture(models.Model):
+    master_apparel_product = models.ForeignKey(Apparel, verbose_name=_("Apparel Product"), on_delete=models.CASCADE)
     product_caption = models.CharField(_("Caption"), max_length=255)
     product_photo = models.ImageField(_("Picture"), upload_to='media/')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -103,8 +101,8 @@ class Apparel_Picture(models.Model):
         return self.product_caption
 
 @python_2_unicode_compatible
-class Apparel_Shipping(models.Model):
-    master_apparel_product = models.ForeignKey(Apparel_Product, verbose_name=_("Apparel Product"), on_delete=models.CASCADE)
+class Shipping(models.Model):
+    master_apparel_product = models.ForeignKey(Apparel, verbose_name=_("Apparel Product"), on_delete=models.CASCADE)
     shipping_method = models.CharField(_("Shipping Method"), max_length=255)
     shipping_price = models.CharField(_("Shipping Price"), max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -118,8 +116,8 @@ class Apparel_Shipping(models.Model):
         return self.shipping_price
 
 @python_2_unicode_compatible
-class Apparel_Sizes(models.Model):
-    master_apparel_product = models.ForeignKey(Apparel_Product, verbose_name=_("Apparel Product"), on_delete=models.CASCADE)
+class Sizes(models.Model):
+    master_apparel_product = models.ForeignKey(Apparel, verbose_name=_("Apparel Product"), on_delete=models.CASCADE)
     size = models.CharField(_("Size"), max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -132,8 +130,8 @@ class Apparel_Sizes(models.Model):
         return self.size
 
 @python_2_unicode_compatible
-class Apparel_Colors(models.Model):
-    master_apparel_product = models.ForeignKey(Apparel_Product, verbose_name=_("Apparel Product"), on_delete=models.CASCADE)
+class Colors(models.Model):
+    master_apparel_product = models.ForeignKey(Apparel, verbose_name=_("Apparel Product"), on_delete=models.CASCADE)
     color = models.CharField(_("Color"), max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

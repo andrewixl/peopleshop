@@ -18,6 +18,134 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'main/css/categories_styles.css'%}">
 	<link rel="stylesheet" type="text/css" href="{% static 'main/css/categories_responsive.css'%}">
   <link rel="stylesheet" type="text/css" href="{% static 'main/css/productpage.css'%}">
+	<!-- Start of Script -->
+	<script type="text/javascript">
+	<!--
+	//
+	function Dollar (val) {  // force to valid dollar amount
+	var str,pos,rnd=0;
+	  if (val < .995) rnd = 1;  // for old Netscape browsers
+	  str = escape (val*1.0 + 0.005001 + rnd);  // float, round, escape
+	  pos = str.indexOf (".");
+	  if (pos > 0) str = str.substring (rnd, pos + 3);
+	  return str;
+	}
+
+	var amt,des,obj,val,op1a,op1b,op2a,op2b,itmn;
+
+	function ChkTok (obj1) {
+	var j,tok,ary=new Array ();       // where we parse
+	  ary = val.split (" ");          // break apart
+	  for (j=0; j<ary.length; j++) {  // look at all items
+	// first we do single character tokens...
+	    if (ary[j].length < 2) continue;
+	    tok = ary[j].substring (0,1); // first character
+	    val = ary[j].substring (1);   // get data
+	    if (tok == "@") amt = val * 1.0;
+	    if (tok == "+") amt = amt + val*1.0;
+	    if (tok == "%") amt = amt + (amt * val/100.0);
+	     if (tok == "-") amt = amt - val*1.0;
+	    if (tok == "#") {             // record item number
+	      if (obj1.item_number) obj1.item_number.value = val;
+	      ary[j] = "";                // zap this array element
+	    }
+	// Now we do 3-character tokens...
+	    if (ary[j].length < 4) continue;
+	    tok = ary[j].substring (0,3); // first 3 chars
+	    val = ary[j].substring (3);   // get data
+	    if (tok == "s1=") {           // value for shipping
+	      if (obj1.shipping)  obj1.shipping.value  = val;
+	      ary[j] = "";                // clear it out
+	    }
+	    if (tok == "s2=") {           // value for shipping2
+	      if (obj1.shipping2) obj1.shipping2.value = val;
+	      ary[j] = "";                // clear it out
+	    }
+	  }
+	  val = ary.join (" ");           // rebuild val with what's left
+	}
+
+	function StorVal () {
+	var tag;
+	  tag = obj.name.substring (obj.name.length-2);  // get flag
+	  if      (tag == "1a") op1a = op1a + " " + val;
+	  else if (tag == "1b") op1b = op1b + " " + val;
+	  else if (tag == "2a") op2a = op2a + " " + val;
+	  else if (tag == "2b") op2b = op2b + " " + val;
+	  else if (tag == "3i") itmn = itmn + " " + val;
+	  else if (des.length == 0) des = val;
+	  else des = des + ", " + val;
+	}
+
+	function ReadForm (obj1, tst) { // Read the user form
+	var i,j,pos;
+	  amt=0;des="";op1a="";op1b="";op2a="";op2b="";itmn="";
+	  if (obj1.baseamt) amt  = obj1.baseamt.value*1.0;  // base amount
+	  if (obj1.basedes) des  = obj1.basedes.value;  // base description
+	  if (obj1.baseon0) op1a = obj1.baseon0.value;  // base options
+	  if (obj1.baseos0) op1b = obj1.baseos0.value;
+	  if (obj1.baseon1) op2a = obj1.baseon1.value;
+	  if (obj1.baseos1) op2b = obj1.baseos1.value;
+	  if (obj1.baseitn) itmn = obj1.baseitn.value;
+	  for (i=0; i<obj1.length; i++) {     // run entire form
+	    obj = obj1.elements[i];           // a form element
+	    if (obj.type == "select-one") {   // just selects
+	      if (obj.name == "quantity" ||
+	          obj.name == "amount") continue;
+	      pos = obj.selectedIndex;        // which option selected
+	      val = obj.options[pos].value;   // selected value
+	      ChkTok (obj1);                  // check for any specials
+
+	      if (obj.name == "on0" ||        // let this go where it wants
+	          obj.name == "os0" ||
+	          obj.name == "on1" ||
+	          obj.name == "os1") continue;
+
+	      StorVal ();
+
+	    } else
+	    if (obj.type == "checkbox" ||     // just get checkboxex
+	        obj.type == "radio") {        //  and radios
+	      if (obj.checked) {
+	        val = obj.value;              // the value of the selection
+	        ChkTok (obj1);
+	        StorVal ();
+	      }
+	    } else
+	    if (obj.type == "select-multiple") {  //one or more
+	      for (j=0; j<obj.options.length; j++) {  // run all options
+	        if (obj.options[j].selected) {
+	          val = obj.options[j].value; // selected value (default)
+	          ChkTok (obj1);
+	          StorVal ();
+	        }
+	      }
+	    } else
+	    if ((obj.type == "text" ||        // just read text,
+	         obj.type == "textarea") &&
+	         obj.name != "tot" &&         //  but not from here
+	         obj.name != "quantity") {
+	      val = obj.value;                // get the data
+	      if (val == "" && tst) {         // force an entry
+	        alert ("Enter data for " + obj.name);
+	        return false;
+	      }
+	      StorVal ();
+	    }
+	  }
+	// Now summarize stuff we just processed, above
+	  if (op1a.length > 0) obj1.on0.value = op1a;
+	  if (op1b.length > 0) obj1.os0.value = op1b;
+	  if (op2a.length > 0) obj1.on1.value = op2a;
+	  if (op2b.length > 0) obj1.os1.value = op2b;
+	  if (itmn.length > 0) obj1.item_number.value = itmn;
+	  obj1.item_name.value = des;
+	  obj1.amount.value = Dollar (amt);
+	  if (obj1.tot) obj1.tot.value = "$" + Dollar (amt);
+	}
+	//-->
+	</script>
+	<!-- End of Script -->
 </head>
 
 <body>
@@ -74,10 +202,25 @@
   								<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
   								<li><a href="/member"><i class="fa fa-user" aria-hidden="true"></i></a></li>
   								<li class="checkout">
-  									<a href="#">
+										<!--  Start of View Cart Button Code  -->
+										<form target="_self" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+										<!-- If using a Business or Company Logo Graphic, include the "cpp_header_image" variable in your View Cart code. -->
+										<input type="hidden" name="cpp_header_image" value="https://www.yourwebsite.com/logo.jpg">
+										<input type="hidden" name="cmd" value="_cart">
+										<input type="hidden" name="display" value="1">
+										<!-- Replace "business" value with your PayPal Email Address or Account ID -->
+										<input type="hidden" name="business" value="admin@peopleshop.gq">
+										<!-- Replace value with the web page you want the customer to return to -->
+										<input type="hidden" name="shopping_url" value="http://www.yourwebsite.com/Script_06.html">
+										<!-- <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"> -->
+										<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+										<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+										</form>
+										<!--  End of View Cart Button Code  -->
+  									<!-- <a href="#">
   										<i class="fa fa-shopping-cart" aria-hidden="true"></i>
   										<span id="checkout_items" class="checkout_items">2</span>
-  									</a>
+  									</a> -->
   								</li>
   							</ul>
   							<div class="hamburger_container">
@@ -98,53 +241,129 @@
                 <ul class="product-images justify-content-center">
                     <li class="preview"><img src="https://peopleshopmedia.s3.amazonaws.com/media/{{product.product_cover}}" alt=""></li>
                     <!-- Don't show small pictures if there's only 1 -->
+										{%for photos in photos%}
                     <li>
-                        <a href="javascript:void(0)"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/800/2/w/1024/6756201800_2_6_1.jpg?ts=1472203990151" alt=""></a>
+                        <a href="javascript:void(0)"><img src="https://peopleshopmedia.s3.amazonaws.com/media/{{photos.product_photo}}" alt=""></a>
                     </li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/800/2/w/1024/6756201800_1_1_1.jpg?ts=1472213925652" alt=""></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/802/2/w/1024/6756201802_2_5_1.jpg?ts=1472203996493" alt=""></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><img src="http://static.zara.net/photos///2016/I/0/1/p/6756/201/802/2/w/1024/6756201802_1_1_1.jpg?ts=1472556621736" alt=""></a>
-                    </li>
+										{%endfor%}
                 </ul>
                 <ul class="product-info">
                     <li class="product-name">{{product.product_name}}</li>
-                    <li class="product-price"><span>{{product.product_price}}</span></li>
+                    <li class="product-price"><span>${{product.product_price}}</span></li>
                     <li class="product-attributes">
-                      <form class="" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-                        <ul class="fields">
-                          <li>
-                              <div class="field-name">Color:</div>
-                              <label>
-                                <select name="cars">
-                                  {%for colors in colors%}
-                                  <option value="{{colors.color}}">{{colors.color}}</option>
-                                  {%endfor%}
-                                </select>
-                              </label>
-                          </li>
-                          <li>
-                              <div class="field-name">Size:</div>
-                              <label>
-                                <select name="cars">
-                                  {%for sizes in sizes%}
-                                  <option value="{{colors.color}}">{{sizes.size}}</option>
-                                  {%endfor%}
-                                </select>
-                              </label>
-                          </li>
-                          <li>
-                            <input type="hidden" name="cmd" value="_s-xclick">
-                            <input type="hidden" name="hosted_button_id" value="YB9HP7PWY8J2G">
-                            <input type="image" src="http://s3-us-west-2.amazonaws.com/peopleshopmedia/static/Add+to+Cart+Button.png" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                          </li>
-                        </ul>
-                      </form>
+											<!-- START CONTENTS -->
+
+											<!-- START BUTTON EXAMPLES -->
+
+											<!-- Start of Add to Cart Form -->
+											<!-- Note: target="paypal" was replaced with the variable target="_self" -->
+											<!-- Note: shopping_url also added to code -->
+											<!-- These two changes allow better functionality with IE and Firefox -->
+											<form action="https://www.paypal.com/cgi-bin/webscr" method="post" onsubmit="this.target = '_self'; return ReadForm(this, true);">
+											<form target="_self" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+											<!-- If using a Business or Company Logo Graphic, include the "cpp_header_image" variable in your View Cart code. -->
+											<input type="hidden" name="cpp_header_image" value="https://s3-us-west-2.amazonaws.com/peopleshopmedia/static/Favicon-01.png">
+											<input type="hidden" name="cmd" value="_cart">
+											<input type="hidden" name="add" value="1">
+											<!-- Replace "business" value with your PayPal Email Address or Account ID -->
+											<input type="hidden" name="business" value="admin@peopleshop.gq">
+											<input type="hidden" name="item_name">
+											<input type="hidden" name="item_number">
+											<input type="hidden" name="amount">
+											<input type="hidden" name="currency_code" value="USD">
+											<input type="hidden" name="lc" value="US">
+											<input type="hidden" name="button_subtype" value="products">
+											<input type="hidden" name="no_note" value="0">
+											<input type="hidden" name="cn" value="Add special instructions to the seller:">
+											<input type="hidden" name="bn" value="PP-ShopCartBF:btn_cart_LG.gif:NonHosted">
+											<!--  -->
+											<!-- Replace value with the web page you want the customer to return to -->
+											<input type="hidden" name="shopping_url" value="https://www.peopleshop.gq/product/{{product.product_type}}/{{product.id}}">
+											<!-- Replace value with the web page you want the customer to return to after a successful transaction -->
+											<input type="hidden" name="return" value="https://www.peopleshop.gq/T">
+											<!-- Replace value with the web page you want the customer to return to after item cancellation -->
+											<input type="hidden" name="cancel_return" value="http://www.peopleshop.gq">
+											<!--  -->
+											<input type="hidden" name="baseamt" value="{{product.product_price}}">
+											<input type="hidden" name="basedes" value="{{product.product_name}}">
+											<!--  -->
+											<input type="hidden" name="baseon0">
+											<input type="hidden" name="baseos0">
+											<input type="hidden" name="baseon1">
+											<input type="hidden" name="baseos1">
+											<input type="hidden" name="baseitn">
+											<!--  -->
+											<input type="hidden" name="on0">
+											<input type="hidden" name="os0">
+											<input type="hidden" name="on1">
+											<input type="hidden" name="os1">
+											<!--  -->
+											Color:&nbsp;&nbsp;
+											<br><select name="Size" onchange="ReadForm (this.form, false);">
+											  <option value="Please Choose" selected>Please Choose</option>
+												{%for colors in colors%}
+                        	<option value="{{colors.color}}">{{colors.color}}</option>
+                        {%endfor%}
+											</select>
+											<!--  -->
+											<br><br>
+											<!--  -->
+											<INPUT type="hidden" name="on0" value="Size">Size:
+											<br><SELECT name="os0">
+											<option value="Please Choose" selected>Please Choose</option>
+											{%for sizes in sizes%}
+		                    	<option value="{{sizes.size}}">{{sizes.size}}</option>
+											{%endfor%}
+											</SELECT>
+											<!--  -->
+											<br><br>
+											<!--  -->
+
+											</SELECT>
+											<!--  -->
+											Shipping Options:&nbsp;&nbsp;
+											<select name="Options" onchange="ReadForm (this.form, false);">
+											  <option value="Please Choose" selected>Please Choose</option>
+												{%for shipping in shipping%}
+														<option value="{{shipping.shipping_method}} +{{shipping.shipping_price}}">{{shipping.shipping_method}} + {{shipping.shipping_price}}</option>
+												{%endfor%}
+											</select>
+											<!--  -->
+											<br><br>
+											<!--  -->
+											Total Cost &gt;
+											<input class="nbor" type="text" name="tot" size="8" value="$0.00">
+											<!--  -->
+											<!--  -->
+											<br><br>
+											<input type="image" src="http://s3-us-west-2.amazonaws.com/peopleshopmedia/static/Add+to+Cart+Button.png" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+											<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+											</form>
+											<!-- End of Form -->
+
+											<br>
+
+											<!--  Start of View Cart Button Code  -->
+											<!-- <form target="_self" action="https://www.paypal.com/cgi-bin/webscr" method="post"> -->
+											<!-- If using a Business or Company Logo Graphic, include the "cpp_header_image" variable in your View Cart code. -->
+											<!-- <input type="hidden" name="cpp_header_image" value="https://www.yourwebsite.com/logo.jpg"> -->
+											<!-- <input type="hidden" name="cmd" value="_cart"> -->
+											<!-- <input type="hidden" name="display" value="1"> -->
+											<!-- Replace "business" value with your PayPal Email Address or Account ID -->
+											<!-- <input type="hidden" name="business" value="admin@peopleshop.gq"> -->
+											<!-- Replace value with the web page you want the customer to return to -->
+											<!-- <input type="hidden" name="shopping_url" value="http://www.yourwebsite.com/Script_06.html"> -->
+											<!-- <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"> -->
+											<!-- <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"> -->
+											<!-- </form> -->
+											<!--  End of View Cart Button Code  -->
+
+
+											<!-- END BUTTON EXAMPLES -->
+
+
+
+											<!-- END SAMPLE CODE SECTION -->
                     </li>
                     <li class="product-description">
                         {{product.product_description}}
