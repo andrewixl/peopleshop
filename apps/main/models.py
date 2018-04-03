@@ -63,9 +63,50 @@ class Contact(models.Model):
     def __str__(self):
         return self.contact_subject
 
+class EmailManager(models.Manager):
+    def createEmail(self, postData):
+        results = {'status': True, 'errors': [], 'user': None}
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", postData['email']):
+            results['status'] = False
+            results['errors'].append('Please Enter a Valid Email.')
+
+        if results['status'] == True:
+            results['errors'].append(
+                'Your Message Has Successfully Been Sent.')
+            results['person'] = Contact.objects.create(contact_name=postData['name'], contact_email=postData['email'], contact_subject=postData['subject'], contact_message=postData['message'])
+
+            subject = "Thanks for Joining Our Newsletter!"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            message = 'Message:\n' + "Hello!"
+            recipient_list = ['admin@peopleshop.gq','info@peopleshop.gq', postData['email']]
+            html_message = '''<h4>Thanks for Joining Our Newsletter</h4>
+                              <h4>We will start emailing you daily deals for hot apparel items on the site.</h4>
+                              <h4>Below is a coupon code for your next purchase!</h4>
+                              <h4>Code: </h4>
+                              <h4>HJKA8D2</h4>
+                              <h5>This is a Sent Message From the Newsletter Form on peopleshop.gq</h5> '''.format(name=postData['name'], email=postData['email'], message=postData['message'])
+
+            send_mail(subject, message, from_email, recipient_list,
+                      fail_silently=False, html_message=html_message)
+        return results
+
+@python_2_unicode_compatible
+class Email(models.Model):
+    newsletter_email = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = ContactManager()
+
+    class Meta:
+        verbose_name = _("Newsletter Email")
+        verbose_name_plural = _("Newsletter Emails")
+
+    def __str__(self):
+        return self.newsletter_email
+
 @python_2_unicode_compatible
 class Apparel(models.Model):
-    product_type = models.CharField(_("Product Type"),max_length=256, choices=[('men', 'Men'), ('women', 'Female'), ('kids', 'Kids')])
+    product_type = models.CharField(_("Product Type"),max_length=256, choices=[('men', 'Men'), ('women', 'Women'), ('kids', 'Kids')])
     product_name = models.CharField(_("Name"), max_length=255)
     product_cover = models.ImageField( _("Album Cover (240px x 240px)"), upload_to='media/', default='media/None/no-img.jpg')
     product_gender_type = models.CharField(_("Gender"),max_length=256, choices=[('men', 'Male'), ('women', 'Female'), ('unisex', 'Unisex')])

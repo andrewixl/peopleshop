@@ -8,11 +8,17 @@ def genErrors(request, Emessages):
 		messages.error(request, message)
 
 def index(request):
-    return render(request, 'main/index.html')
+	products = Apparel.objects.all()
+	print products
+	print "complete"
+	context = {
+	"products":products,
+	}
+	return render(request, 'main/index.html', context)
 
 def categories(request, id):
 	if id == "apparel":
-		products = Apparel.objects.filter().all()
+		products = Apparel.objects.all()
 	if id == "men":
 		products = Apparel.objects.filter(product_type = "men").all()
 	if id == "women":
@@ -29,19 +35,19 @@ def product(request, type_id, product_id):
 	if type_id == "men":
 		product = Apparel.objects.get(id = product_id)
 		photos = Picture.objects.filter(master_apparel_product = product_id).all()
-		colors = Colors.objects.filter(master_apparel_product = product_id).all()
+		colors = Colors.objects.filter(master_apparel_product = product_id).all().order_by('color')
 		sizes = Sizes.objects.filter(master_apparel_product = product_id).all()
 		shipping = Shipping.objects.filter(master_apparel_product = product_id).all()
 	if type_id == "women":
 		product = Apparel.objects.get(id = product_id)
 		photos = Picture.objects.filter(master_apparel_product = product_id).all()
-		colors = Colors.objects.filter(master_apparel_product = product_id).all()
+		colors = Colors.objects.filter(master_apparel_product = product_id).all().order_by('color')
 		sizes = Sizes.objects.filter(master_apparel_product = product_id).all()
 		shipping = Shipping.objects.filter(master_apparel_product = product_id).all()
 	if type_id == "kids":
 		product = Apparel.objects.get(id = product_id)
 		photos = Picture.objects.filter(master_apparel_product = product_id).all()
-		colors = Colors.objects.filter(master_apparel_product = product_id).all()
+		colors = Colors.objects.filter(master_apparel_product = product_id).all().order_by('color')
 		sizes = Sizes.objects.filter(master_apparel_product = product_id).all()
 		shipping = Shipping.objects.filter(master_apparel_product = product_id).all()
 	context = {

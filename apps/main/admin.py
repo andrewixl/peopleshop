@@ -8,7 +8,7 @@ admin.site.register(Contact)
 
 # Register your models here.
 def get_picture_preview(obj):
-    if obj.pk:  # if object has already been saved and has a primary key, show picture preview
+    if obj.pk:
         return """<a href="{src}" target="_blank"><img src="{src}" alt="{title}" style="max-width: 200px; max-height: 200px;" /></a>""".format(
             src=obj.product_photo.url,
             title=obj.product_caption,
@@ -25,7 +25,7 @@ class PictureInline(admin.StackedInline):
     readonly_fields = ["get_edit_link", get_picture_preview]
 
     def get_edit_link(self, obj=None):
-        if obj.pk:  # if object has already been saved and has a primary key, show link to it
+        if obj.pk:
             url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[force_text(obj.pk)])
             return """<a href="{url}">{text}</a>""".format(
                 url=url,

@@ -24,7 +24,7 @@ from .views import member_index, member_action
 
 urlpatterns = [
     # Landing page area
-    url(r'^$', TemplateView.as_view(template_name='main/index.html'), name='landing_index'),
+    # url(r'^$', TemplateView.as_view(template_name='main/index.html'), name='landing_index'),
     url(r'^about$', TemplateView.as_view(template_name='visitor/landing-about.html'), name='landing_about'),
     url(r'^terms/$', TemplateView.as_view(template_name='visitor/terms.html'), name='website_terms'),
     # url(r'^contact$', TemplateView.as_view(template_name='visitor/contact.html'), name='website_contact'),
