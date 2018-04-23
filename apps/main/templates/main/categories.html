@@ -77,10 +77,20 @@
 								<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
 								<li><a href="/member"><i class="fa fa-user" aria-hidden="true"></i></a></li>
 								<li class="checkout">
-									<a href="#">
-										<i class="fa fa-shopping-cart" aria-hidden="true"></i>
-										<span id="checkout_items" class="checkout_items">2</span>
-									</a>
+									<!--  Start of View Cart Button Code  -->
+									<form target="_self" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+									<!-- If using a Business or Company Logo Graphic, include the "cpp_header_image" variable in your View Cart code. -->
+									<input type="hidden" name="cpp_header_image" value="https://s3-us-west-2.amazonaws.com/peopleshopmedia/static/Favicon-01.png">
+									<input type="hidden" name="cmd" value="_cart">
+									<input type="hidden" name="display" value="1">
+									<!-- Replace "business" value with your PayPal Email Address or Account ID -->
+									<input type="hidden" name="business" value="payments@peopleshop.gq">
+									<!-- Replace value with the web page you want the customer to return to -->
+									<input type="hidden" name="shopping_url" value="https://www.peopleshop.gq/product/{{product.product_type}}/{{product.id}}">
+									<input type="image" src="https://s3-us-west-2.amazonaws.com/peopleshopmedia/static/cart.jpg"  left="100px" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+									<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+									</form>
+									<!--  End of View Cart Button Code  -->
 								</li>
 							</ul>
 							<div class="hamburger_container">

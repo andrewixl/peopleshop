@@ -8,23 +8,25 @@ def genErrors(request, Emessages):
 		messages.error(request, message)
 
 def index(request):
-	products = Apparel.objects.all()
+	onsale = Apparel.objects.filter(active = True, onsale = True).all() [:2]
+	products = Apparel.objects.filter(active = True).all()
 	print products
 	print "complete"
 	context = {
+	"onsale":onsale,
 	"products":products,
 	}
 	return render(request, 'main/index.html', context)
 
 def categories(request, id):
 	if id == "apparel":
-		products = Apparel.objects.all()
+		products = Apparel.objects.filter(active = True).all()
 	if id == "men":
-		products = Apparel.objects.filter(product_type = "men").all()
+		products = Apparel.objects.filter(product_type = "men", active = True).all()
 	if id == "women":
-		products = Apparel.objects.filter(product_type = "women").all()
+		products = Apparel.objects.filter(product_type = "women", active = True).all()
 	if id == "kids":
-		products = Apparel.objects.filter(product_type = "kids").all()
+		products = Apparel.objects.filter(product_type = "kids", active = True).all()
 
 	context = {
 	"products":products,
@@ -58,6 +60,9 @@ def product(request, type_id, product_id):
 	"shipping" : shipping,
     }
 	return render(request, 'main/productpage.html', context)
+
+def policies(request):
+   return render(request, 'main/policies.html')
 
 def promotions(request):
    return render(request, 'main/promotions.html')

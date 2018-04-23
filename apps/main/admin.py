@@ -54,7 +54,7 @@ class ColorInline(admin.StackedInline):
 @admin.register(Apparel)
 class Apparel_ProductAdmin(admin.ModelAdmin):
     save_on_top = True
-    fields = ["product_type","product_name", "product_cover","product_gender_type", "product_brand", "product_price","real_brand_price","product_description",]
+    fields = ["active", "onsale","product_type","product_name", "product_cover","product_gender_type", "product_brand", "product_price","real_brand_price","product_description",]
     inlines = [SizeInline, ColorInline, ShippingInline, PictureInline,]
 
 @admin.register(Picture)

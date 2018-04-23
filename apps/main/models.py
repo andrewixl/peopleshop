@@ -114,7 +114,8 @@ class Apparel(models.Model):
     product_description = models.CharField(_("Description"),max_length=1000)
     product_price = models.CharField(_("Price"),max_length=500)
     real_brand_price = models.CharField(_("Real Brand Price"),max_length=500)
-    paypal_button = models.CharField(_("Real Brand Price"),max_length=750)
+    active = models.BooleanField()
+    onsale = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

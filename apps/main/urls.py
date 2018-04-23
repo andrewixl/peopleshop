@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^product/(?P<type_id>\w+)/(?P<product_id>\d+)/$', views.product),
     url(r'^promotions/$', views.promotions),
     url(r'^contact/$', views.contact, name='website_contact'),
-    url(r'^createcontact$', views.createcontact)
+    url(r'^createcontact$', views.createcontact),
+    url(r'^policies$', views.policies),
 ]

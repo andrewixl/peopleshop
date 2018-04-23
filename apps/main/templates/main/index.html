@@ -16,6 +16,16 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'main/css/main_styles.css'%}">
 	<link rel="stylesheet" type="text/css" href="{% static 'main/css/responsive.css'%}">
 </head>
+<style media="screen">
+	.images{
+		height:100%;
+	}
+	.product-items{
+		width:50%;
+		height:540px;
+		/* border-right: solid 1px #e9e9e9; */
+	}
+</style>
 
 <body>
 
@@ -75,10 +85,20 @@
 								<li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
 								<li><a href="/member"><i class="fa fa-user" aria-hidden="true"></i></a></li>
 								<li class="checkout">
-									<a href="#">
-										<i class="fa fa-shopping-cart" aria-hidden="true"></i>
-										<!-- <span id="checkout_items" class="checkout_items">2</span> -->
-									</a>
+									<!--  Start of View Cart Button Code  -->
+									<form target="_self" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+									<!-- If using a Business or Company Logo Graphic, include the "cpp_header_image" variable in your View Cart code. -->
+									<input type="hidden" name="cpp_header_image" value="https://s3-us-west-2.amazonaws.com/peopleshopmedia/static/Favicon-01.png">
+									<input type="hidden" name="cmd" value="_cart">
+									<input type="hidden" name="display" value="1">
+									<!-- Replace "business" value with your PayPal Email Address or Account ID -->
+									<input type="hidden" name="business" value="payments@peopleshop.gq">
+									<!-- Replace value with the web page you want the customer to return to -->
+									<input type="hidden" name="shopping_url" value="https://www.peopleshop.gq/">
+									<input type="image" src="https://s3-us-west-2.amazonaws.com/peopleshopmedia/static/cart.jpg"  left="100px" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+									<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+									</form>
+									<!--  End of View Cart Button Code  -->
 								</li>
 							</ul>
 							<div class="hamburger_container">
@@ -136,49 +156,6 @@
 	<div class="deal_ofthe_week">
 		<div class="container fill_height">
 			<div class="row align-items-center fill_height">
-				<div class="col-lg-6">
-					<div class="deal_ofthe_week_img">
-						<!-- <img src="{% static 'main/images/deal_ofthe_week.png'%}" alt=""> -->
-						<div class="container">
-							<div class="row">
-								<div class="col">
-									<div class="product_slider_container">
-										<div class="owl-carousel owl-theme product_slider">
-
-											<!-- Slide 1 -->
-
-											{%for products in products%}
-											<div class="owl-item product_slider_item">
-												<div class="product-item">
-													<div class="product discount">
-														<div class="product_image">
-															<img src="https://peopleshopmedia.s3.amazonaws.com/media/{{products.product_cover}}" alt="">
-														</div>
-														<div class="favorite favorite_left"></div>
-														<div class="product_info">
-															<h6 class="product_name"><a href="single.html">{{products.product_name}}</a></h6>
-															<div class="product_price">{{products.product_price}}<span>{{products.real_brand_price}}</span></div>
-														</div>
-													</div>
-												</div>
-											</div>
-											{%endfor%}
-
-										<!-- Slider Navigation -->
-
-										<div class="product_slider_nav_left product_slider_nav d-flex align-items-center justify-content-center flex-column">
-											<i class="fa fa-chevron-left" aria-hidden="true"></i>
-										</div>
-										<div class="product_slider_nav_right product_slider_nav d-flex align-items-center justify-content-center flex-column">
-											<i class="fa fa-chevron-right" aria-hidden="true"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					</div>
-				</div>
 				<div class="col-lg-6 text-right deal_ofthe_week_col">
 					<div class="deal_ofthe_week_content d-flex flex-column align-items-center float-right">
 						<div class="section_title">
@@ -186,7 +163,7 @@
 						</div>
 						<ul class="timer">
 							<li class="d-inline-flex flex-column justify-content-center align-items-center">
-								<div id="day" class="timer_num">03</div>
+								<div id="day" class="timer_num">0</div>
 								<div class="timer_unit">Day</div>
 							</li>
 							<li class="d-inline-flex flex-column justify-content-center align-items-center">
@@ -202,7 +179,45 @@
 								<div class="timer_unit">Sec</div>
 							</li>
 						</ul>
-						<div class="red_button deal_ofthe_week_button"><a href="#">shop now</a></div>
+						<div class="red_button deal_ofthe_week_button"><a href="/categories/apparel">shop now</a></div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="deal_ofthe_week_img">
+						<!-- <img src="{% static 'main/images/deal_ofthe_week.png'%}" alt=""> -->
+						<div class="container products_iso">
+							<div class="row">
+								<div class="col text-center">
+									<div class="section_title new_arrivals_title">
+										<h2>Current Deals</h2>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<!-- <div class="col"> -->
+
+										<!-- Product 1 -->
+										{%for onsale in onsale%}
+										<a href="../../product/{{onsale.product_type}}/{{onsale.id}}">
+											<div class="product-items men">
+											<div class="product discount product_filter">
+												<div class="product_image">
+													<img src="https://peopleshopmedia.s3.amazonaws.com/media/{{onsale.product_cover}}" alt="" class="images">
+												</div>
+												<div class="favorite favorite_left"></div>
+												<!-- <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-$20</span></div> -->
+												<div class="product_info">
+													<h6 class="product_name">{{onsale.product_name}}</h6>
+													<div class="product_price">{{onsale.product_price}}<span>{{onsale.real_brand_price}}</span></div>
+												</div>
+											</div>
+											<div class="red_button add_to_cart_button"><a href="#">Quick View</a></div>
+										</div>
+										</a>
+										{%endfor%}
+
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -308,179 +323,25 @@
 							<div class="owl-carousel owl-theme product_slider">
 
 								<!-- Slide 1 -->
-
+								{%for products in products%}
 								<div class="owl-item product_slider_item">
-									<div class="product-item">
+									<div class="product-item women">
 										<div class="product discount">
 											<div class="product_image">
-												<img src="{% static 'main/images/product_1.png'%}" alt="">
+												<img src="https://peopleshopmedia.s3.amazonaws.com/media/{{products.product_cover}}" alt="">
 											</div>
 											<div class="favorite favorite_left"></div>
-											<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-$20</span></div>
+											<!-- <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-$20</span></div> -->
 											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP Digital Camera (Silver)</a></h6>
-												<div class="product_price">$520.00<span>$590.00</span></div>
+												<h6 class="product_name"><a href="single.html">{{products.product_name}}</a></h6>
+												<div class="product_price">${{products.product_price}}<span>{{products.real_brand_price}}</span></div>
 											</div>
 										</div>
 									</div>
 								</div>
+								{%endfor%}
 
-								<!-- Slide 2 -->
 
-								<div class="owl-item product_slider_item">
-									<div class="product-item women">
-										<div class="product">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_2.png'%}" alt="">
-											</div>
-											<div class="favorite"></div>
-											<div class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">Samsung CF591 Series Curved 27-Inch FHD Monitor</a></h6>
-												<div class="product_price">$610.00</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Slide 3 -->
-
-								<div class="owl-item product_slider_item">
-									<div class="product-item women">
-										<div class="product">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_3.png'%}" alt="">
-											</div>
-											<div class="favorite"></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">Blue Yeti USB Microphone Blackout Edition</a></h6>
-												<div class="product_price">$120.00</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Slide 4 -->
-
-								<div class="owl-item product_slider_item">
-									<div class="product-item accessories">
-										<div class="product">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_4.png'%}" alt="">
-											</div>
-											<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>sale</span></div>
-											<div class="favorite favorite_left"></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">DYMO LabelWriter 450 Turbo Thermal Label Printer</a></h6>
-												<div class="product_price">$410.00</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Slide 5 -->
-
-								<div class="owl-item product_slider_item">
-									<div class="product-item women men">
-										<div class="product">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_5.png'%}" alt="">
-											</div>
-											<div class="favorite"></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">Pryma Headphones, Rose Gold & Grey</a></h6>
-												<div class="product_price">$180.00</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Slide 6 -->
-
-								<div class="owl-item product_slider_item">
-									<div class="product-item accessories">
-										<div class="product discount">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_6.png'%}" alt="">
-											</div>
-											<div class="favorite favorite_left"></div>
-											<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-$20</span></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">Fujifilm X100T 16 MP Digital Camera (Silver)</a></h6>
-												<div class="product_price">$520.00<span>$590.00</span></div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Slide 7 -->
-
-								<div class="owl-item product_slider_item">
-									<div class="product-item women">
-										<div class="product">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_7.png'%}" alt="">
-											</div>
-											<div class="favorite"></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">Samsung CF591 Series Curved 27-Inch FHD Monitor</a></h6>
-												<div class="product_price">$610.00</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Slide 8 -->
-
-								<div class="owl-item product_slider_item">
-									<div class="product-item accessories">
-										<div class="product">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_8.png'%}" alt="">
-											</div>
-											<div class="favorite"></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">Blue Yeti USB Microphone Blackout Edition</a></h6>
-												<div class="product_price">$120.00</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Slide 9 -->
-
-								<div class="owl-item product_slider_item">
-									<div class="product-item men">
-										<div class="product">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_9.png'%}" alt="">
-											</div>
-											<div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>sale</span></div>
-											<div class="favorite favorite_left"></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">DYMO LabelWriter 450 Turbo Thermal Label Printer</a></h6>
-												<div class="product_price">$410.00</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<!-- Slide 10 -->
-
-								<div class="owl-item product_slider_item">
-									<div class="product-item men">
-										<div class="product">
-											<div class="product_image">
-												<img src="{% static 'main/images/product_10.png'%}" alt="">
-											</div>
-											<div class="favorite"></div>
-											<div class="product_info">
-												<h6 class="product_name"><a href="single.html">Pryma Headphones, Rose Gold & Grey</a></h6>
-												<div class="product_price">$180.00</div>
-											</div>
-										</div>
-									</div>
-								</div>
 							</div>
 
 							<!-- Slider Navigation -->
@@ -521,13 +382,16 @@
 					</div>
 				</div>
 				<div class="col-lg-3 benefit_col">
+					<a href="/policies#return">
 					<div class="benefit_item d-flex flex-row align-items-center">
 						<div class="benefit_icon"><i class="fa fa-undo" aria-hidden="true"></i></div>
 						<div class="benefit_content">
 							<h6>15 day return policy</h6>
 							<p>From the Day Recieved</p>
+							<p>Click for Full Return Policy</p>
 						</div>
 					</div>
+					</a>
 				</div>
 				<div class="col-lg-3 benefit_col">
 					<div class="benefit_item d-flex flex-row align-items-center">
