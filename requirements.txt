@@ -26,7 +26,7 @@ lxml==4.0.0
 nexus-yplan==1.6.0
 oauthlib==2.0.6
 olefile==0.44
-Pillow==4.2.1
+Pillow==6.2.0
 pycparser==2.18
 python-dateutil==2.6.1
 python-openid==2.2.5
